@@ -1,0 +1,22 @@
+{
+  "name": "manganelo-crawler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "pdfkit": "^0.10.0",
+    "puppeteer": "^1.19.0",
+    "sharp": "^0.23.0"
+  },
+  "devDependencies": {
+    "@types/puppeteer": "^1.19.1",
+    "@types/sharp": "^0.22.2",
+    "typescript": "^3.5.3"
+  }
+}
