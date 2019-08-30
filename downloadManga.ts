@@ -5,6 +5,7 @@ import {Sharp} from "sharp";
 import {CliArguments} from "./argsParser";
 import * as fs from "fs";
 import {join} from "path";
+import {promiseLog} from "./utils";
 
 const sharp = require("sharp");
 const PDFDocument = require('pdfkit');
@@ -49,11 +50,12 @@ async function addChapterToPdf(doc: typeof PDFDocument, page: Page, url: string,
     await urls.reduce(
         (chain, url) => chain
             .then(() => getAsync(url))
-            .then(response => response.pipe<Sharp>(sharp().resize(PAGE_WIDTH, PAGE_HEIGHT)).toBuffer())
-            .then(buffer => doc
-                .addPage({ margin: 10, size: "A4" })
+            .then(response => response.pipe<Sharp>(sharp().resize(PAGE_WIDTH, PAGE_HEIGHT, { fit: "outside" })))
+            .then(sharpStream => Promise.all([sharpStream.toBuffer(), sharpStream.metadata()]))
+            .then(([buffer, meta]) => doc
+                .addPage({ margin: 5, size: [meta.width + 10, meta.height + 10] })
                 .image(buffer, {
-                    fit: [PAGE_WIDTH, PAGE_HEIGHT],
+                    fit: [meta.width, meta.height],
                     align: 'center',
                     valign: 'center'
                 })
